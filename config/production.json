@@ -1,0 +1,6 @@
+{
+    "mongoDB": {
+        "connectionString": "",
+        "password": ""
+    }
+}
