@@ -1,5 +1,5 @@
 'use client';
-import { FormEventHandler, useEffect } from 'react';
+import { Fragment, MouseEventHandler, useEffect } from 'react';
 import { useFormState } from 'react-dom';
 import { useRouter } from 'next/navigation';
 import { useAppDispatch, useAppSelector } from '@/app/_store/hooks';
@@ -22,9 +22,7 @@ type FormState = {
     };
 };
 
-const initialFormState: FormState = {
-    errors: {},
-};
+const initialFormState: FormState = {};
 
 export default function AddTodoForm() {
     const router = useRouter();
@@ -33,7 +31,11 @@ export default function AddTodoForm() {
     const addTodoFormState = useAppSelector((state) => state.addTodoForm);
 
     useEffect(() => {
-        if(formState.todo) {
+        console.log(formState);
+    }, [formState]);
+
+    useEffect(() => {
+        if (formState.todo) {
             dispatch(addTodoFormActions.resetForm());
         }
     }, [dispatch, formState.todo]);
@@ -42,10 +44,11 @@ export default function AddTodoForm() {
         router.push('/');
     };
 
-    const submitHandler: FormEventHandler<HTMLFormElement> = (event) => {
+    const submitHandler: MouseEventHandler<HTMLButtonElement> = (event) => {
         event.preventDefault();
 
-        const form = event.currentTarget;
+        const button = event.currentTarget;
+        const form = button.form;
 
         if (!form || !addTodoFormState.isValid) {
             return;
@@ -61,9 +64,9 @@ export default function AddTodoForm() {
     );
 
     return (
-        <>
-            {formState?.todo && feedbackCmp}
-            <form className="flex flex-col gap-y-2" action={formAction} onSubmit={submitHandler}>
+        <Fragment>
+            {formState.todo && feedbackCmp}
+            <form className="flex flex-col gap-y-2" action={formAction}>
                 <Input
                     type="text"
                     label="Title"
@@ -86,12 +89,13 @@ export default function AddTodoForm() {
                     </Button>
                     <Button
                         type="submit"
+                        onClick={submitHandler}
                         disabled={!addTodoFormState.isValid}
                     >
                         Submit
                     </Button>
                 </div>
             </form>
-        </>
+        </Fragment>
     );
 }

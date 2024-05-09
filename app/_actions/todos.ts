@@ -66,7 +66,7 @@ export async function addTodo(prevState: any, formData: FormData) {
         title: todo.title,
         description: todo.description,
         createdAt: todo.createdAt,
-        updatedAt: todo.updatedAt
+        updatedAt: todo.updatedAt,
     };
 
     revalidatePath('/');

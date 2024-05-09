@@ -5,8 +5,9 @@ import { Inter } from 'next/font/google';
 import { Provider } from 'react-redux';
 import { store } from './_store/store';
 import { uiActions } from './_store/slices/uiSlice';
-import Button from './_components/UI/Button';
 import { THEME } from '@/common';
+import Button from './_components/UI/Button';
+
 import './globals.css';
 
 const inter = Inter({ subsets: ['latin'] });
@@ -22,15 +23,10 @@ export default function RootLayout({
     const [theme, setTheme] = useState<THEME>(() => store.getState().ui.theme);
 
     useEffect(() => {
-        console.log('LAYOUT');
-    }, []);
-
-    useEffect(() => {
-        console.log('set');
         const unsubscribe = store.subscribe(() => {
             setTheme(store.getState().ui.theme);
         });
-        
+
         const localStorageThemeValue = localStorage.getItem('theme');
         let initialTheme = THEME.LIGHT;
         if (localStorageThemeValue === THEME.DARK) {

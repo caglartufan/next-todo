@@ -6,7 +6,7 @@ export const metadata: Metadata = {
     description: 'Todo application for practicing Next.js',
 };
 
-export default async function Home() {
+export default function Home() {
     return (
         <TodoList />
     );
