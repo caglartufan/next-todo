@@ -1,15 +1,19 @@
 'use client';
 export default function Card({
     children,
-    color,
+    className,
 }: Readonly<{
     children: React.ReactNode;
-    color?: 'danger' | 'success' | 'info' | 'warning';
+    className?: string;
 }>) {
-    const bgColor = typeof color === 'undefined' ? 'bg-info' : ('bg-' + color);
+    let cardClassName = 'rounded-md';
+
+    if(className) {
+        cardClassName += ' ' + className;
+    }
 
     return (
-        <div className={'p-2 mb-4 rounded-md text-light ' + bgColor}>
+        <div className={cardClassName}>
             {children}
         </div>
     );

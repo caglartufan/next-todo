@@ -1,7 +1,9 @@
 'use server';
 import { revalidatePath } from 'next/cache';
 import { dbConnect } from '../_lib/db';
+import mongoose from 'mongoose';
 import Todo from '../_models/Todo';
+import { validateTodoTitleAndDescription } from '../_utils/validators';
 
 export async function fetchTodos() {
     await dbConnect();
@@ -27,31 +29,10 @@ export async function addTodo(prevState: any, formData: FormData) {
         };
     } = {};
 
-    response.errors = {};
-
-    if (!title || title === '') {
-        response.errors.title = 'Title must not be empty.';
-    } else if (title.length < 5) {
-        response.errors.title = 'Title must contain at least 5 characters.';
-    } else if (title.length > 50) {
-        response.errors.title = 'Title must contain at most 50 characters.';
-    }
-
-    if (!description || description === '') {
-        response.errors.description = 'Description must not be empty.';
-    } else if (description.length < 3) {
-        response.errors.description =
-            'Description must contain at least 3 characters.';
-    } else if (description.length > 250) {
-        response.errors.description =
-            'Description must contain at most 250 characters.';
-    }
-
-    if (response.errors.title || response.errors.description) {
+    response.errors = validateTodoTitleAndDescription(title, description);
+    if (response.errors) {
         return response;
     }
-
-    response.errors = undefined;
 
     await dbConnect();
 
@@ -71,5 +52,79 @@ export async function addTodo(prevState: any, formData: FormData) {
 
     revalidatePath('/');
 
+    return response;
+}
+
+export async function editTodo(prevState: any, formData: FormData) {
+    const todoId = formData.get('id')?.toString();
+    const title = formData.get('title')?.toString();
+    const description = formData.get('description')?.toString();
+    const response: {
+        error?: string;
+        errors?: {
+            title?: string;
+            description?: string;
+        };
+        todo?: {
+            title: string;
+            description: string;
+            createdAt: Date;
+            updatedAt: Date;
+        };
+    } = {};
+
+    response.error = 'Todo was not found!';
+    if (!todoId || todoId === '' || !mongoose.Types.ObjectId.isValid(todoId)) {
+        return response;
+    }
+
+    const todo = await Todo.findById(todoId);
+
+    if (!todo) {
+        return response;
+    }
+
+    response.error = undefined;
+
+    response.errors = validateTodoTitleAndDescription(title, description);
+    if(response.errors) {
+        return response;
+    }
+
+    todo.title = title!;
+    todo.description = description!;
+
+    await todo.save();
+
+    response.todo = todo;
+
+    revalidatePath('/');
+
+    return response;
+}
+
+export async function deleteTodo(formData: FormData) {
+    const todoId = formData.get('id')?.toString();
+    const response: {
+        ok: boolean;
+        message?: string;
+    } = { ok: false };
+
+    if (!todoId || todoId === '' || !mongoose.Types.ObjectId.isValid(todoId)) {
+        response.message = 'Invalid todo ID given.';
+        return response;
+    }
+
+    const todo = await Todo.findByIdAndDelete(todoId);
+
+    if (!todo) {
+        response.message = 'Todo was not found.';
+        return response;
+    }
+
+    revalidatePath('/');
+
+    response.ok = true;
+    response.message = undefined;
     return response;
 }

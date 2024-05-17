@@ -1,11 +1,11 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { uiReducer } from './slices/uiSlice';
-import { addTodoFormReducer } from './slices/addTodoFormSlice';
+import { formReducer } from './slices/formSlice';
 
 export const store = configureStore({
     reducer: {
         ui: uiReducer,
-        addTodoForm: addTodoFormReducer
+        form: formReducer,
     },
 });
 

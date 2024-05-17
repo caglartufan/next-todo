@@ -1,15 +1,15 @@
 'use client';
 import { Fragment, MouseEventHandler, useEffect } from 'react';
-import { useFormState } from 'react-dom';
+import { useFormState, useFormStatus } from 'react-dom';
 import { useRouter } from 'next/navigation';
 import { useAppDispatch, useAppSelector } from '@/app/_store/hooks';
+import { formActions } from '@/app/_store/slices/formSlice';
 import { addTodo } from '@/app/_actions/todos';
-import { addTodoFormActions } from '@/app/_store/slices/addTodoFormSlice';
 import Button from '../UI/Button';
 import Input from '../UI/Input';
-import Card from '../UI/Card';
+import AlertCard from '../UI/AlertCard';
 
-type FormState = {
+type ServerActionResponse = {
     errors?: {
         title?: string;
         description?: string;
@@ -22,21 +22,38 @@ type FormState = {
     };
 };
 
-const initialFormState: FormState = {};
+const initialFormState: ServerActionResponse = {};
+
+function SubmitButton({
+    disabled,
+    onClick,
+}: Readonly<{
+    disabled: boolean;
+    onClick: MouseEventHandler<HTMLButtonElement>;
+}>) {
+    const { pending } = useFormStatus();
+
+    return (
+        <Button
+            type="submit"
+            onClick={onClick}
+            disabled={pending || disabled}
+        >
+            Submit
+        </Button>
+    );
+}
 
 export default function AddTodoForm() {
+    const formName: FormName = 'add-todo';
     const router = useRouter();
     const dispatch = useAppDispatch();
     const [formState, formAction] = useFormState(addTodo, initialFormState);
-    const addTodoFormState = useAppSelector((state) => state.addTodoForm);
-
-    useEffect(() => {
-        console.log(formState);
-    }, [formState]);
+    const addTodoFormState = useAppSelector((state) => state.form[formName]);
 
     useEffect(() => {
         if (formState.todo) {
-            dispatch(addTodoFormActions.resetForm());
+            dispatch(formActions.resetForm({ formName }));
         }
     }, [dispatch, formState.todo]);
 
@@ -58,9 +75,7 @@ export default function AddTodoForm() {
     };
 
     const feedbackCmp = (
-        <Card color="success">
-            <p className="text-sm">Todo has been created successfully!</p>
-        </Card>
+        <AlertCard success={true} feedback="Todo has been created successfully!" />
     );
 
     return (
@@ -72,7 +87,7 @@ export default function AddTodoForm() {
                     label="Title"
                     name="title"
                     placeholder="Enter title"
-                    inputState={addTodoFormState.inputs.title}
+                    formName={formName}
                     error={formState.errors?.title}
                 />
                 <Input
@@ -80,20 +95,17 @@ export default function AddTodoForm() {
                     label="Description"
                     name="description"
                     placeholder="Enter description"
-                    inputState={addTodoFormState.inputs.description}
+                    formName={formName}
                     error={formState.errors?.description}
                 />
                 <div className="flex flex-row justify-center gap-x-2">
                     <Button type="button" onClick={cancelHandler}>
                         Cancel
                     </Button>
-                    <Button
-                        type="submit"
+                    <SubmitButton
                         onClick={submitHandler}
                         disabled={!addTodoFormState.isValid}
-                    >
-                        Submit
-                    </Button>
+                    />
                 </div>
             </form>
         </Fragment>

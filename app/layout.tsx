@@ -1,5 +1,5 @@
 'use client';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import { Inter } from 'next/font/google';
 import { Provider } from 'react-redux';
@@ -58,19 +58,19 @@ export default function RootLayout({
             <html className={theme === THEME.DARK ? 'dark' : ''} lang="en">
                 <body
                     className={
-                        'flex justify-center items-center h-screen bg-light text-dark dark:bg-dark dark:text-light ' +
+                        'flex flex-col justify-center items-center h-screen p-4 sm:p-0 bg-light text-dark dark:bg-dark dark:text-light ' +
                         inter.className
                     }
                 >
                     {isMounted && (
                         <>
-                            <main className="min-w-[600px] max-h-[80vh] bg-primary dark:bg-secondary rounded-md shadow-md overflow-hidden">
+                            <main className="flex flex-col w-full sm:w-[600px] sm:max-h-[80vh] bg-primary dark:bg-secondary rounded-md shadow-md overflow-hidden">
                                 <div className="bg-primary-darker dark:bg-secondary-darker px-4 py-2 shadow-md">
-                                    <h1 className="text-2xl font-bold">
+                                    <h1 className="text-xl sm:text-2xl font-bold">
                                         Todo App
                                     </h1>
-                                    <div className="flex flex-row justify-between items-center">
-                                        <p className="font-semibold">
+                                    <div className="flex flex-row justify-between items-center gap-x-4">
+                                        <p className="text-sm font-semibold">
                                             Todo application for practicing
                                             Next.js
                                         </p>
@@ -92,14 +92,11 @@ export default function RootLayout({
                                 </div>
                                 <div
                                     className="p-4 overflow-y-auto"
-                                    style={{
-                                        maxHeight: 'calc(80vh - 4.75rem)',
-                                    }}
                                 >
                                     {children}
                                 </div>
                             </main>
-                            <div className="absolute top-8 right-8">
+                            <div className="flex flex-col items-center justify-center mt-4 sm:h-[10vh] sm:m-0 sm:absolute sm:top-0 sm:right-8">
                                 <button
                                     className="text-xs uppercase font-bold text-light cursor-pointer px-2 py-1 bg-secondary dark:bg-primary dark:text-dark rounded-md shadow-md"
                                     onClick={toggleThemeHandler}

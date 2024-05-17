@@ -1,6 +1,6 @@
 'use client';
-import { useAppDispatch } from '@/app/_store/hooks';
-import { addTodoFormActions } from '@/app/_store/slices/addTodoFormSlice';
+import { useAppDispatch, useAppSelector } from '@/app/_store/hooks';
+import { formActions } from '@/app/_store/slices/formSlice';
 import {
     useRef,
     KeyboardEvent,
@@ -18,7 +18,7 @@ export default function Input({
     onFocus,
     onBlur,
     error,
-    inputState,
+    formName,
 }: Readonly<{
     type: 'text' | 'textarea';
     label: string;
@@ -29,9 +29,22 @@ export default function Input({
     onFocus?: FocusEventHandler<HTMLInputElement | HTMLTextAreaElement>;
     onBlur?: FocusEventHandler<HTMLInputElement | HTMLTextAreaElement>;
     error?: string | null;
-    inputState?: InputState;
+    formName?: FormName;
 }>) {
     const dispatch = useAppDispatch();
+    const inputState = useAppSelector((state) => {
+        if (!formName) {
+            return null;
+        }
+
+        const formInputs = state.form[formName].inputs;
+
+        if (!(name in formInputs)) {
+            return null;
+        }
+
+        return formInputs[name as InputName];
+    });
     const inputRef = useRef<HTMLInputElement>(null);
     const textareaRef = useRef<HTMLTextAreaElement>(null);
     let inputCmp: React.ReactNode;
@@ -45,33 +58,36 @@ export default function Input({
         onBlur?: FocusEventHandler<HTMLInputElement | HTMLTextAreaElement>;
     } = inputState
         ? {
-              value: inputState?.value,
+              value: inputState.value,
               onChange: (event) => {
                   dispatch(
-                      addTodoFormActions.changeInput({
-                          inputName: name,
+                      formActions.changeInput({
+                          formName: formName as FormName,
+                          inputName: name as InputName,
                           value: event.target.value,
                       })
                   );
               },
               onFocus: () => {
                   dispatch(
-                      addTodoFormActions.inputTouched({
-                          inputName: name,
+                      formActions.inputTouched({
+                          formName: formName as FormName,
+                          inputName: name as InputName,
                       })
                   );
               },
               onBlur: () => {
                   dispatch(
-                      addTodoFormActions.validateInput({
-                          inputName: name,
+                      formActions.validateInput({
+                          formName: formName as FormName,
+                          inputName: name as InputName,
                       })
                   );
-              }
+              },
           }
         : {};
 
-    if(!error && inputState?.error) {
+    if (!error && inputState?.error) {
         error = inputState.error;
     }
 
