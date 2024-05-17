@@ -75,7 +75,7 @@ const formSlice = createSlice({
         ) => {
             let { formName, inputName, value } = action.payload;
 
-            state[formName].inputs[inputName].value = value.trim();
+            state[formName].inputs[inputName].value = value;
 
             formSlice.caseReducers.validateInput(state, {
                 payload: { formName, inputName },
@@ -90,24 +90,25 @@ const formSlice = createSlice({
 
             const inputState = state[formName].inputs[inputName];
             const { label, validators, value } = inputState;
+            const trimmedValue = value.trim();
 
             if (!validators) {
                 return;
             }
 
             let isValid = false;
-            if (validators.required && value === '') {
+            if (validators.required && trimmedValue === '') {
                 inputState.error = `${label} must not be empty.`;
             } else if (
                 validators.minlength &&
                 validators.minlength > 0 &&
-                value.length < validators.minlength
+                trimmedValue.length < validators.minlength
             ) {
                 inputState.error = `${label} must contain at least ${validators.minlength} characters.`;
             } else if (
                 validators.maxlength &&
                 validators.maxlength > 0 &&
-                value.length > validators.maxlength
+                trimmedValue.length > validators.maxlength
             ) {
                 inputState.error = `${label} must contain at most ${validators.maxlength} characters.`;
             } else {
