@@ -1,6 +1,3 @@
-import path from 'path';
-process.env['NODE_CONFIG_DIR'] = path.join(path.resolve('./'), 'config/');
-console.log(process.env['NODE_CONFIG_DIR']);
 import { Fragment } from 'react';
 import { Metadata } from 'next';
 import AddTodoForm from '../_components/Forms/AddTodoForm';
