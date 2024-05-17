@@ -1,3 +1,5 @@
+import path from 'path';
+process.env['NODE_CONFIG_DIR'] = path.join(path.resolve('./'), 'config/');
 import mongoose from 'mongoose';
 import config from 'config';
 import Todo from '../_models/Todo';
