@@ -1,3 +1,6 @@
+import path from 'path';
+process.env['NODE_CONFIG_DIR'] = path.join(path.resolve('./'), 'config/');
+
 import mongoose from 'mongoose';
 import config from 'config';
 import Todo from '../_models/Todo';
@@ -14,13 +17,14 @@ if (!connectionString) {
     );
     process.exit(1);
 }
-if(process.env.NODE_ENV === 'production') {
-    if(mongoDBPassword) {
-        connectionString = connectionString.replace('<password>', mongoDBPassword);
-    } else {
-        console.error(
-            'MongoDB password was not set! Exiting the process...'
+if (process.env.NODE_ENV === 'production') {
+    if (mongoDBPassword) {
+        connectionString = connectionString.replace(
+            '<password>',
+            mongoDBPassword
         );
+    } else {
+        console.error('MongoDB password was not set! Exiting the process...');
         process.exit(1);
     }
 }
@@ -52,7 +56,7 @@ export async function dbConnect() {
     } catch (error) {
         cached.promise = null;
         console.error('MongoDB connection failed!', error);
-		process.exit(1);
+        process.exit(1);
     }
 
     return cached.conn;
