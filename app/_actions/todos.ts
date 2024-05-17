@@ -18,7 +18,7 @@ export async function addTodo(prevState: any, formData: FormData) {
     const description = formData.get('description')?.toString();
     const response: {
         errors?: {
-            title?: string; 
+            title?: string;
             description?: string;
         };
         todo?: {

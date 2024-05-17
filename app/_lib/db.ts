@@ -6,12 +6,23 @@ declare global {
     var mongoose: any;
 }
 
-const connectionString = config.get<string>('mongoDB.connectionString');
+let connectionString = config.get<string>('mongoDB.connectionString');
+const mongoDBPassword = config.get<string>('mongoDB.password');
 if (!connectionString) {
     console.error(
         'MongoDB connection string was not set! Exiting the process...'
     );
     process.exit(1);
+}
+if(process.env.NODE_ENV === 'production') {
+    if(mongoDBPassword) {
+        connectionString = connectionString.replace('<password>', mongoDBPassword);
+    } else {
+        console.error(
+            'MongoDB password was not set! Exiting the process...'
+        );
+        process.exit(1);
+    }
 }
 
 let cached = global.mongoose;

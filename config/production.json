@@ -1,7 +1,7 @@
 {
-    "baseurl": "http://localhost:3000",
+    "baseurl": "",
     "mongoDB": {
-        "connectionString": "mongodb://localhost:27017/",
+        "connectionString": "mongodb+srv://admin:<password>@quizlet-free-cluster.qgksoj3.mongodb.net/todo?retryWrites=true&w=majority&appName=quizlet-free-cluster",
         "password": ""
     }
 }
