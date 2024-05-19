@@ -1,36 +1,41 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Next Todo
 
-## Getting Started
+## :pencil: About the project
 
-First, run the development server:
+This is a hobby project which mainly serves purpose of creating, listing, editing and deleting todos. Back-end of the application is connected to a MongoDB Atlas cluster database and anyone can perform these CRUD operations on the website. In other words, there's no authentication to keep the application simple.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+This application is hosted on Vercel and you can view it online: https://next-todo-six-wine.vercel.app/
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## :microscope: Technologies used
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+HTML, CSS, JavaScript, TypeScript, React, Redux-Toolkit, Next.js, Tailwind.css, MongoDB, Mongoose ORM
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+## :art: Images from project
 
-## Learn More
+Homepage (Dark Theme)
 
-To learn more about Next.js, take a look at the following resources:
+![next-todo-homepage](https://github.com/caglartufan/next-todo/assets/37420200/1574535f-dccf-47ed-ad67-4925f9627333)
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Homepage (Light Theme)
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+![next-todo-homepage-light](https://github.com/caglartufan/next-todo/assets/37420200/532b5209-a284-458f-9e4e-017a4e9ada1a)
 
-## Deploy on Vercel
+Edit todo
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+![next-todo-edit-todo](https://github.com/caglartufan/next-todo/assets/37420200/49a07d27-60fe-4ee1-afbc-f06d0280249f)
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+Add todo
+
+![next-todo-add-todo](https://github.com/caglartufan/next-todo/assets/37420200/b1f3e8d9-9fff-4ae1-98ac-07672b62368f)
+
+Mobile responsive view
+
+![next-todo-mobile-view](https://github.com/caglartufan/next-todo/assets/37420200/cceb8398-f819-481e-8ccd-eddbe22caa90)
+
+## :dart: Gains
+
+- :white_check_mark: Practiced basics of Next.js; App Router, Routing, Server Side & Client Side Components, Loading & Error Handling, Linking & Navigating, Server Actions & Mutations, Caching & Revalidating Data
+- :white_check_mark: Form submission with Server Actions, making use of Server Action responses using `useFormState` hook, handling pending form submission with `useFormStatus`
+- :white_check_mark: Experience of Next.js and Redux-Toolkit usage together
+- :white_check_mark: Implemented simple dark and light mode, and responsiveness with Tailwind.css
+- :white_check_mark: Next.js application's deployment to Vercel
